@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     public enum UserType {
         RIDER,
@@ -21,12 +22,12 @@ public class User {
 
     //TODO: HASH
     private String password;
-
     private String phoneNumber;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private UserType userType;
-    private LocalDateTime createdAt;
+
 
     public User(String firstName, String lastName, String email, String password, String phoneNumber, UserType userType) {
         this.firstName = firstName;
