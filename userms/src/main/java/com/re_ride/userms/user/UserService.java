@@ -9,5 +9,5 @@ public interface UserService{
     List<User> getAllDrivers();
     User createUser(User user);
     User updateUserById(Long userId, User user);
-    String deleteUserById(Long userId);
+    boolean deleteUserById(Long userId);
 }

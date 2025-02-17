@@ -74,12 +74,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUserById(Long userId) {
+    public boolean deleteUserById(Long userId) {
         if(getUserById(userId) != null){
             userRepository.deleteById(userId);
-            return "User deleted successfully.";
+            return true;
         }
 
-        return "User not found.";
+        return false;
     }
 }
