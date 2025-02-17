@@ -19,16 +19,15 @@ services:
     ports:
       - "8761:8761"
     depends_on:
-      - rabbitmq
-      - zipkin
       - postgres
-      - pgadmin
     networks:
-      - microservice-network
       - postgres
+      - microservice_network
 
 networks:
   postgres:
+    driver: bridge
+  microservice_network:
     driver: bridge
 
 volumes:
