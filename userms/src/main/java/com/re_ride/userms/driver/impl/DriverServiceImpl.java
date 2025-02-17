@@ -3,7 +3,6 @@ package com.re_ride.userms.driver.impl;
 import com.re_ride.userms.driver.Driver;
 import com.re_ride.userms.driver.DriverRepository;
 import com.re_ride.userms.driver.DriverService;
-import com.re_ride.userms.user.User;
 import com.re_ride.userms.user.UserRepository;
 import org.springframework.stereotype.Service;
 

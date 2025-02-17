@@ -41,13 +41,6 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllRiders(), HttpStatus.OK);
     }
 
-    //get all drivers
-    //TODO: create DTO
-    @GetMapping("/drivers")
-    public ResponseEntity<List<User>> getAllDrivers(){
-        return new ResponseEntity<>(userService.getAllDrivers(), HttpStatus.OK);
-    }
-
     //create user
     @PostMapping()
     public ResponseEntity<User> createUser(@RequestBody User user){

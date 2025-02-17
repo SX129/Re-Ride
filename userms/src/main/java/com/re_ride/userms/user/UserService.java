@@ -6,7 +6,6 @@ public interface UserService{
     List<User> getAllUsers();
     User getUserById(Long userId);
     List<User> getAllRiders();
-    List<User> getAllDrivers();
     User createUser(User user);
     User updateUserById(Long userId, User user);
     boolean deleteUserById(Long userId);

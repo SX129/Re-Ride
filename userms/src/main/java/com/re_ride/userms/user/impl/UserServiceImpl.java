@@ -35,14 +35,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllDrivers() {
-        return userRepository.findAll()
-                .stream()
-                .filter(user -> user.getUserType() == User.UserType.DRIVER)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public User createUser(User user) {
         userRepository.save(user);
         return user;
