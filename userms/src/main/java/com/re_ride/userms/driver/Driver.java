@@ -4,6 +4,7 @@ import com.re_ride.userms.user.User;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "drivers")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Driver extends User {
     public enum AvailabilityStatus {
