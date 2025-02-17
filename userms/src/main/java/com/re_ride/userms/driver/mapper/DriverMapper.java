@@ -11,6 +11,12 @@ public class DriverMapper {
         driverDTO.setRating(driver.getRating());
         driverDTO.setVehicleId(driver.getVehicleId());
 
+        driverDTO.setUserId(driver.getUserId());
+        driverDTO.setFirstName(driver.getFirstName());
+        driverDTO.setLastName(driver.getLastName());
+        driverDTO.setEmail(driver.getEmail());
+        driverDTO.setPhoneNumber(driver.getPhoneNumber());
+
         return driverDTO;
     }
 }
