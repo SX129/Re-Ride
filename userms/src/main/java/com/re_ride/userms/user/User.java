@@ -32,7 +32,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-
     public User(String firstName, String lastName, String email, String password, String phoneNumber, UserType userType) {
         this.firstName = firstName;
         this.lastName = lastName;

@@ -1,10 +1,14 @@
 package com.re_ride.userms.user;
 
+import com.re_ride.userms.user.dto.UserDTO;
+import com.re_ride.userms.user.mapper.UserMapper;
+import com.re_ride.userms.user.response.UserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -17,46 +21,54 @@ public class UserController {
 
     //get all Users
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers(){
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
+        return new ResponseEntity<>(userService.getAllUsers()
+                .stream()
+                .map(UserMapper::mapUserDto)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     //get User by ID
-    //TODO: create DTO
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId){
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId){
         User user = userService.getUserById(userId);
 
         if(user == null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new UserResponse(null, "User not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        UserDTO userDTO = UserMapper.mapUserDto(user);
+
+        return new ResponseEntity<>(new UserResponse(userDTO, "User found."), HttpStatus.OK);
     }
 
     //get all riders
-    //TODO: create DTO
     @GetMapping("/riders")
-    public ResponseEntity<List<User>> getAllRiders(){
-        return new ResponseEntity<>(userService.getAllRiders(), HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getAllRiders(){
+        return new ResponseEntity<>(userService.getAllRiders()
+                .stream()
+                .map(UserMapper::mapUserDto)
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     //create user
     @PostMapping()
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    public ResponseEntity<UserResponse> createUser(@RequestBody User user){
+        return new ResponseEntity<>(new UserResponse(UserMapper.mapUserDto(userService.createUser(user)), "User created successfully."), HttpStatus.CREATED);
     }
 
     //patch user
     @PatchMapping("/{userId}")
-    public ResponseEntity<User> updateUserById(@RequestBody User user, @PathVariable Long userId){
+    public ResponseEntity<UserResponse> updateUserById(@RequestBody User user, @PathVariable Long userId){
         User updatedUser = userService.updateUserById(userId, user);
 
         if(updatedUser == null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new UserResponse(null, "User not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        UserDTO userDTO = UserMapper.mapUserDto(updatedUser);
+
+        return new ResponseEntity<>(new UserResponse(userDTO, "User updated successfully."), HttpStatus.OK);
     }
 
     //delete user
