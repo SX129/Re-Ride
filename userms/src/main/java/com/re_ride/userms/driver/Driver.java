@@ -32,6 +32,7 @@ public class Driver extends User {
 
     public Driver() {
         super.setUserType(UserType.DRIVER);
+        this.availabilityStatus = AvailabilityStatus.AVAILABLE;
     }
 
     public String getLicenseNumber() {

@@ -1,6 +1,5 @@
 package com.re_ride.userms.driver;
 
-import com.re_ride.userms.user.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
