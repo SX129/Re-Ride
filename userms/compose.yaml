@@ -1,9 +1,35 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    container_name: postgres_container
+    image: postgres:latest
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_USER: syphe
+      POSTGRES_PASSWORD: syphe
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
     ports:
-      - '5432'
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+  servicereg:
+    image: syph3/servicereg:latest
+    container_name: servicereg
+    ports:
+      - "8761:8761"
+    depends_on:
+      - rabbitmq
+      - zipkin
+      - postgres
+      - pgadmin
+    networks:
+      - microservice-network
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
