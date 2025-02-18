@@ -48,7 +48,7 @@ public class VehicleController {
         Vehicle vehicle = vehicleService.createVehicle(vehicleDTO);
 
         if(vehicle == null){
-            return new ResponseEntity<>(new VehicleResponse(null, "Vehicle not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new VehicleResponse(null, "Driver not found."), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(new VehicleResponse(vehicleDTO, "Vehicle created successfully."), HttpStatus.OK);
