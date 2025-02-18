@@ -1,5 +1,7 @@
 package com.re_ride.userms.vehicle;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.re_ride.userms.driver.Driver;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,7 +18,9 @@ public class Vehicle {
     private Long vehicleId;
 
     @OneToOne
-    private Long driverId;
+    @JsonManagedReference
+    @JoinColumn(name = "user_id")
+    private Driver driver;
 
     private String make;
     private String model;
@@ -28,8 +32,10 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     private VehicleType vehicleType;
 
-    public Vehicle(Long driverId, String make, String model, Integer year, String licensePlate, String color, Integer capacity, VehicleType vehicleType) {
-        this.driverId = driverId;
+    public Vehicle() {}
+
+    public Vehicle(Driver driver, String make, String model, Integer year, String licensePlate, String color, Integer capacity, VehicleType vehicleType) {
+        this.driver = driver;
         this.make = make;
         this.model = model;
         this.year = year;
@@ -39,8 +45,6 @@ public class Vehicle {
         this.vehicleType = vehicleType;
     }
 
-    public Vehicle(){}
-
     public Long getVehicleId() {
         return vehicleId;
     }
@@ -49,12 +53,12 @@ public class Vehicle {
         this.vehicleId = vehicleId;
     }
 
-    public Long getDriverId() {
-        return driverId;
+    public Driver getDriver() {
+        return driver;
     }
 
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
     public String getMake() {
