@@ -9,7 +9,8 @@ public class DriverMapper {
 
         driverDTO.setAvailabilityStatus(driver.getAvailabilityStatus());
         driverDTO.setRating(driver.getRating());
-        driverDTO.setVehicleId(driver.getVehicleId());
+
+        driverDTO.setVehicleId(driver.getVehicle().getVehicleId());
 
         driverDTO.setUserId(driver.getUserId());
         driverDTO.setFirstName(driver.getFirstName());

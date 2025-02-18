@@ -71,9 +71,11 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public boolean deleteDriverById(Long userId) {
-        if(getDriverById(userId) != null){
+        Driver driver = getDriverById(userId);
+        if (driver != null) {
             driverRepository.deleteById(userId);
             userRepository.deleteById(userId);
+
             return true;
         }
 

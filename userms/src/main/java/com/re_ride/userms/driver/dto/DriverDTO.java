@@ -1,6 +1,7 @@
 package com.re_ride.userms.driver.dto;
 
 import com.re_ride.userms.driver.Driver;
+import com.re_ride.userms.vehicle.Vehicle;
 
 public class DriverDTO {
     private Long userId;

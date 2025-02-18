@@ -1,12 +1,15 @@
 package com.re_ride.userms.driver;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.re_ride.userms.user.User;
+import com.re_ride.userms.vehicle.Vehicle;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "drivers")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Driver extends User {
+
     public enum AvailabilityStatus {
         AVAILABLE,
         BUSY,
@@ -14,18 +17,23 @@ public class Driver extends User {
     }
 
     private String licenseNumber;
-    private Long vehicleId;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "vehicle_id")
+    @JsonBackReference
+    private Vehicle vehicle;
+
     private Double rating;
 
     @Enumerated(EnumType.STRING)
     private AvailabilityStatus availabilityStatus;
 
     public Driver(String firstName, String lastName, String email, String password,
-                  String phoneNumber, String licenseNumber, Long vehicleId,
+                  String phoneNumber, String licenseNumber, Vehicle vehicle,
                   Double rating, AvailabilityStatus availabilityStatus) {
         super(firstName, lastName, email, password, phoneNumber, UserType.DRIVER);
         this.licenseNumber = licenseNumber;
-        this.vehicleId = vehicleId;
+        this.vehicle = vehicle;
         this.rating = rating;
         this.availabilityStatus = availabilityStatus;
     }
@@ -33,6 +41,10 @@ public class Driver extends User {
     public Driver() {
         super.setUserType(UserType.DRIVER);
         this.availabilityStatus = AvailabilityStatus.AVAILABLE;
+    }
+
+    public void removeVehicle() {
+        this.vehicle = null;
     }
 
     public String getLicenseNumber() {
@@ -43,12 +55,12 @@ public class Driver extends User {
         this.licenseNumber = licenseNumber;
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
     public Double getRating() {
