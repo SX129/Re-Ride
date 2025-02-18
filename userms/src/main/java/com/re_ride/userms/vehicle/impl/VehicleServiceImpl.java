@@ -34,7 +34,7 @@ public class VehicleServiceImpl implements VehicleService {
     public Vehicle createVehicle(VehicleDTO vehicleDTO) {
         Driver driver = driverRepository.findById(vehicleDTO.getUserId()).orElse(null);
 
-        if(driver == null){
+        if(driver == null || driver.getVehicle() != null){
             return null;
         }
 
