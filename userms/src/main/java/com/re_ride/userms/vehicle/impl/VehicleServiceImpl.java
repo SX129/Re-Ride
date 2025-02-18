@@ -1,8 +1,11 @@
 package com.re_ride.userms.vehicle.impl;
 
+import com.re_ride.userms.driver.Driver;
+import com.re_ride.userms.driver.DriverRepository;
 import com.re_ride.userms.vehicle.Vehicle;
 import com.re_ride.userms.vehicle.VehicleRepository;
 import com.re_ride.userms.vehicle.VehicleService;
+import com.re_ride.userms.vehicle.dto.VehicleDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +13,11 @@ import java.util.List;
 @Service
 public class VehicleServiceImpl implements VehicleService {
     private VehicleRepository vehicleRepository;
+    private DriverRepository driverRepository;
 
-    public VehicleServiceImpl(VehicleRepository vehicleRepository){
+    public VehicleServiceImpl(VehicleRepository vehicleRepository, DriverRepository driverRepository){
         this.vehicleRepository = vehicleRepository;
+        this.driverRepository = driverRepository;
     }
 
     @Override
@@ -26,8 +31,29 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Vehicle createVehicle(Vehicle vehicle) {
+    public Vehicle createVehicle(VehicleDTO vehicleDTO) {
+        Driver driver = driverRepository.findById(vehicleDTO.getUserId()).orElse(null);
+
+        if(driver == null){
+            return null;
+        }
+
+        Vehicle vehicle = new Vehicle(
+                driver,
+                vehicleDTO.getMake(),
+                vehicleDTO.getModel(),
+                vehicleDTO.getYear(),
+                vehicleDTO.getLicensePlate(),
+                vehicleDTO.getColor(),
+                vehicleDTO.getCapacity(),
+                vehicleDTO.getVehicleType()
+        );
+
         vehicleRepository.save(vehicle);
+
+        driver.setVehicle(vehicle);
+        driverRepository.save(driver);
+
         return vehicle;
     }
 
@@ -74,11 +100,18 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public boolean deleteVehicleById(Long vehicleId) {
-        if(getVehicleById(vehicleId) != null){
+        Vehicle vehicle = getVehicleById(vehicleId);
+        if (vehicle != null) {
+            Driver driver = vehicle.getDriver();
+
+            if (driver != null) {
+                driver.removeVehicle();
+                driverRepository.save(driver);
+            }
+
             vehicleRepository.deleteById(vehicleId);
             return true;
         }
-
         return false;
     }
 }

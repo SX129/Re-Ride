@@ -1,5 +1,7 @@
 package com.re_ride.userms.vehicle;
 
+import com.re_ride.userms.vehicle.dto.VehicleDTO;
+
 import java.util.List;
 
 public interface VehicleService {
@@ -7,7 +9,7 @@ public interface VehicleService {
 
     Vehicle getVehicleById(Long vehicleId);
 
-    Vehicle createVehicle(Vehicle vehicle);
+    Vehicle createVehicle(VehicleDTO vehicleDTO);
 
     Vehicle updateVehicleById(Long vehicleId, Vehicle vehicle);
 
