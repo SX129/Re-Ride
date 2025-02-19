@@ -1,7 +1,5 @@
 package com.re_ride.userms.vehicle.mapper;
 
-import com.re_ride.userms.driver.Driver;
-import com.re_ride.userms.driver.dto.DriverDTO;
 import com.re_ride.userms.vehicle.Vehicle;
 import com.re_ride.userms.vehicle.dto.VehicleDTO;
 
@@ -18,6 +16,7 @@ public class VehicleMapper {
         vehicleDTO.setLicensePlate(vehicle.getLicensePlate());
 
         vehicleDTO.setUserId(vehicle.getDriver().getUserId());
+        vehicleDTO.setVehicleId(vehicle.getVehicleId());
 
         return vehicleDTO;
     }

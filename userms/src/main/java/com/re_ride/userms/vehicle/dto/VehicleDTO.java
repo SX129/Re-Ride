@@ -4,6 +4,7 @@ import com.re_ride.userms.vehicle.Vehicle;
 
 public class VehicleDTO {
     private Long userId;
+    private Long vehicleId;
     private String make;
     private String model;
     private Integer year;
@@ -11,6 +12,14 @@ public class VehicleDTO {
     private String color;
     private Integer capacity;
     private Vehicle.VehicleType vehicleType;
+
+    public Long getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
+    }
 
     public Long getUserId() {
         return userId;
