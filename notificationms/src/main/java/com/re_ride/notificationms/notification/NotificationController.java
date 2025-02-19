@@ -1,5 +1,8 @@
 package com.re_ride.notificationms.notification;
 
+import com.re_ride.notificationms.notification.response.NotificationResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,45 +17,43 @@ public class NotificationController {
     }
 
     @GetMapping()
-    public List<Notification> getAllNotificationsByUserId(@PathVariable Long userId, @RequestParam(required = false) String notificationType){
+    public ResponseEntity<List<Notification>> getAllNotificationsByUserId(@PathVariable Long userId, @RequestParam(required = false) String notificationType){
         if(notificationType != null){
             List<Notification> notifications = notificationService.getAllNotificationTypeByUserId(userId, notificationType);
 
             if(notifications == null){
-                System.out.println("User or notification type not found.");
-                return null;
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
+
+            return new ResponseEntity<>(notifications, HttpStatus.OK);
+        }else{
+            List<Notification> notifications = notificationService.getAllNotificationsByUserId(userId);
+
+            if(notifications == null){
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>(notifications, HttpStatus.OK);
         }
-
-        List<Notification> notifications = notificationService.getAllNotificationsByUserId(userId);
-
-        if(notifications == null){
-            System.out.println("User not found.");
-            return null;
-        }
-
-        return notifications;
     }
 
     @PostMapping()
-    public Notification createNotification(@PathVariable Long userId, @RequestBody Notification notification){
+    public ResponseEntity<NotificationResponse> createNotification(@PathVariable Long userId, @RequestBody Notification notification){
         Notification savedNotification = notificationService.createNotification(userId, notification);
 
         if(savedNotification == null){
-            System.out.println("User or notification type not found.");
-            return null;
+            return new ResponseEntity<>(new NotificationResponse(null, "User or notification not found."), HttpStatus.NOT_FOUND);
         }
 
-        return savedNotification;
+        return new ResponseEntity<>(new NotificationResponse(savedNotification, "Notification created successfully."), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{notificationId}")
-    public boolean deleteNotification(@PathVariable Long userId, @PathVariable Long notificationId){
+    public ResponseEntity<String> deleteNotification(@PathVariable Long userId, @PathVariable Long notificationId){
         if(notificationService.deleteNotification(userId, notificationId)){
-            return true;
+            return new ResponseEntity<>("Notification deleted successfully.", HttpStatus.OK);
         }
 
-        System.out.println("User or notification not found.");
-        return false;
+        return new ResponseEntity<>("User or notification not found.", HttpStatus.NOT_FOUND);
     }
 }

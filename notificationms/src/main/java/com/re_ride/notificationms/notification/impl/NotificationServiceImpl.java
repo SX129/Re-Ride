@@ -7,7 +7,6 @@ import com.re_ride.notificationms.notification.client.UserClient;
 import com.re_ride.notificationms.notification.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
