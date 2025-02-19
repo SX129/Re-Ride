@@ -2,11 +2,13 @@ package com.re_ride.notificationms.notification;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications")
+@EnableFeignClients
 public class Notification {
     public enum NotificationType {
         RIDE_UPDATE,
@@ -24,6 +26,8 @@ public class Notification {
     private LocalDateTime createdAt;
 
     private Long userId;
+
+    private NotificationType notificationType;
 
     public Notification(){}
 
@@ -70,5 +74,13 @@ public class Notification {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public NotificationType getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
     }
 }
