@@ -9,7 +9,7 @@ public interface NotificationService {
 
     List<Notification> getAllNotificationTypeByUserId(Long userId, String notificationType);
 
-    Notification createNotification(Notification notification);
+    Notification createNotification(Long userId, Notification notification);
 
     boolean deleteNotification(Long userId, Long notificationId);
 

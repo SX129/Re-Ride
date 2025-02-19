@@ -1,7 +1,5 @@
 package com.re_ride.notificationms.notification;
 
-import com.re_ride.notificationms.notification.client.UserClient;
-import com.re_ride.notificationms.notification.dto.UserDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,11 +7,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/users/{userId}/notifications")
 public class NotificationController {
-    private NotificationService notificationService;
+    private final NotificationService notificationService;
 
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-
+    public NotificationController(NotificationService notificationService, NotificationService notificationService1) {
+        this.notificationService = notificationService1;
     }
 
     @GetMapping()
@@ -38,11 +35,11 @@ public class NotificationController {
     }
 
     @PostMapping()
-    public Notification createNotification(@RequestBody Notification notification){
-        Notification savedNotification = notificationService.createNotification(notification);
+    public Notification createNotification(@PathVariable Long userId, @RequestBody Notification notification){
+        Notification savedNotification = notificationService.createNotification(userId, notification);
 
         if(savedNotification == null){
-            System.out.println("User not found.");
+            System.out.println("User or notification type not found.");
             return null;
         }
 

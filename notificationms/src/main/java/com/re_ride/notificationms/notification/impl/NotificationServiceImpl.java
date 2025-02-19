@@ -2,15 +2,17 @@ package com.re_ride.notificationms.notification.impl;
 
 import com.re_ride.notificationms.notification.Notification;
 import com.re_ride.notificationms.notification.NotificationRepository;
+import com.re_ride.notificationms.notification.NotificationService;
 import com.re_ride.notificationms.notification.client.UserClient;
 import com.re_ride.notificationms.notification.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class NotificationServiceImpl {
+public class NotificationServiceImpl implements NotificationService {
     private NotificationRepository notificationRepository;
     private UserClient userClient;
 
@@ -38,25 +40,23 @@ public class NotificationServiceImpl {
     }
 
     public List<Notification> getAllNotificationTypeByUserId(Long userId, String notificationType) {
-        try {
-            if(getUser(userId) == null){
-                return null;
-            }
-
-            Notification.NotificationType type = Notification.NotificationType.valueOf(notificationType);
-
-            return notificationRepository.findByUserId(userId).stream()
-                    .filter(notification -> notification.getNotificationType() == type)
-                    .collect(Collectors.toList());
-        } catch (IllegalArgumentException e) {
+        if (getUser(userId) == null) {
             return null;
         }
+
+        Notification.NotificationType type = Notification.NotificationType.valueOf(notificationType);
+
+        return notificationRepository.findByUserId(userId).stream()
+                .filter(notification -> notification.getNotificationType() == type)
+                .collect(Collectors.toList());
     }
 
-    public Notification createNotification(Notification notification){
-        if(getUser(notification.getUserId()) == null){
+    public Notification createNotification(Long userId, Notification notification) {
+        if (getUser(userId) == null) {
             return null;
         }
+
+        notification.setUserId(userId);
         notificationRepository.save(notification);
 
         return notification;
@@ -76,6 +76,4 @@ public class NotificationServiceImpl {
 
         return false;
     }
-
-
 }
