@@ -27,6 +27,7 @@ public class Notification {
 
     private Long userId;
 
+    @Enumerated(EnumType.STRING)
     private NotificationType notificationType;
 
     public Notification(){}
