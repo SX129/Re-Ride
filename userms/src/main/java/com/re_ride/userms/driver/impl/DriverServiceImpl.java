@@ -46,8 +46,9 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public Driver updateDriverById(Long userId, Driver driver) {
-        if(getDriverById(userId) != null) {
-            Driver updatedDriver = getDriverById(userId);
+        Driver updatedDriver = getDriverById(userId);
+
+        if(updatedDriver != null) {
 
             if(driver.getAvailabilityStatus() != null){
                 updatedDriver.setAvailabilityStatus(driver.getAvailabilityStatus());

@@ -62,7 +62,7 @@ public class DriverController {
         Driver updatedDriver = driverService.updateDriverById(userId, driver);
 
         if(updatedDriver == null){
-            new ResponseEntity<>(new DriverResponse(null, "Driver not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new DriverResponse(null, "Driver not found."), HttpStatus.NOT_FOUND);
         }
 
         DriverDTO driverDTO = DriverMapper.mapDriverDto(updatedDriver);
