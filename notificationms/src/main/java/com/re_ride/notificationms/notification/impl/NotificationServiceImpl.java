@@ -50,6 +50,20 @@ public class NotificationServiceImpl implements NotificationService {
                 .collect(Collectors.toList());
     }
 
+    public Notification getNotificationById(Long userId, Long notificationId){
+        if (getUser(userId) == null) {
+            return null;
+        }
+
+        Notification notification = notificationRepository.findById(notificationId).orElse(null);
+
+        if (notification != null && notification.getUserId().equals(userId)) {
+            return notification;
+        }
+
+        return null;
+    }
+
     public Notification createNotification(Long userId, Notification notification) {
         if (getUser(userId) == null) {
             return null;

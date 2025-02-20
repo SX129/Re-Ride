@@ -37,6 +37,17 @@ public class NotificationController {
         }
     }
 
+    @GetMapping("/{notificationId}")
+    public ResponseEntity<NotificationResponse> getNotificationById(@PathVariable Long userId, @PathVariable Long notificationId){
+        Notification notification = notificationService.getNotificationById(userId, notificationId);
+
+        if(notification == null){
+            return new ResponseEntity<>(new NotificationResponse(null, "User or notification not found."), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new NotificationResponse(notification, "Notification found successfully."), HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<NotificationResponse> createNotification(@PathVariable Long userId, @RequestBody Notification notification){
         Notification savedNotification = notificationService.createNotification(userId, notification);

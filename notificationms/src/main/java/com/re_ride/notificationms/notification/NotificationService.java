@@ -9,6 +9,8 @@ public interface NotificationService {
 
     List<Notification> getAllNotificationTypeByUserId(Long userId, String notificationType);
 
+    Notification getNotificationById(Long userId, Long notificationId);
+
     Notification createNotification(Long userId, Notification notification);
 
     boolean deleteNotification(Long userId, Long notificationId);
