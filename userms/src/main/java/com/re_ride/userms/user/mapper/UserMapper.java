@@ -13,7 +13,7 @@ public class UserMapper {
         userDTO.setLastName(user.getLastName());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setUserType(user.getUserType());
+        userDTO.setUserType(String.valueOf(user.getUserType()));
 
         return userDTO;
     }

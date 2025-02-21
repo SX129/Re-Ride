@@ -1,14 +1,12 @@
 package com.re_ride.userms.user.dto;
 
-import com.re_ride.userms.user.User;
-
 public class UserDTO {
     private Long userId;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
-    private User.UserType userType;
+    private String userType;
 
     public Long getUserId() {
         return userId;
@@ -50,11 +48,11 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public User.UserType getUserType() {
+    public String getUserType() {
         return userType;
     }
 
-    public void setUserType(User.UserType userType) {
+    public void setUserType(String userType) {
         this.userType = userType;
     }
 }
