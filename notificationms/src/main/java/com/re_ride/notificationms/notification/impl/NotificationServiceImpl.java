@@ -5,6 +5,7 @@ import com.re_ride.notificationms.notification.NotificationRepository;
 import com.re_ride.notificationms.notification.NotificationService;
 import com.re_ride.notificationms.notification.client.UserClient;
 import com.re_ride.notificationms.notification.dto.UserDTO;
+import com.re_ride.notificationms.notification.response.UserResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +22,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public UserDTO getUser(Long userId){
-        UserDTO user = userClient.getUserById(userId);
+        UserResponse response = userClient.getUserById(userId);
 
-        if(user == null){
+        if(response == null || response.getUserDTO() == null) {
             return null;
         }
 
-        return user;
+        return response.getUserDTO();
     }
 
     public List<Notification> getAllNotificationsByUserId(Long userId){

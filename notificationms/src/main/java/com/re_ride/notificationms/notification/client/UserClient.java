@@ -1,6 +1,6 @@
 package com.re_ride.notificationms.notification.client;
 
-import com.re_ride.notificationms.notification.dto.UserDTO;
+import com.re_ride.notificationms.notification.response.UserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserClient {
 
     @GetMapping("/{userId}")
-    UserDTO getUserById(@PathVariable Long userId);
+    UserResponse getUserById(@PathVariable Long userId);
 }
