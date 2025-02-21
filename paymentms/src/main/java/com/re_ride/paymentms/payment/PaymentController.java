@@ -56,7 +56,7 @@ public class PaymentController {
         Payment savedPayment = paymentService.createPayment(userId, payment);
 
         if(savedPayment == null){
-            return new ResponseEntity<>(new PaymentResponse(null, "User not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new PaymentResponse(null, "Rider not found."), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(new PaymentResponse(payment, "Payment created successfully."), HttpStatus.CREATED);
@@ -65,6 +65,7 @@ public class PaymentController {
     //update status of payment
     @PatchMapping("/{paymentId}")
     public ResponseEntity<PaymentResponse> updatePaymentStatus(@PathVariable Long userId, @PathVariable Long paymentId, @RequestBody String paymentStatus){
+        paymentStatus = paymentStatus.replace("\"", "");
         Payment updatedPayment = paymentService.updatePaymentStatus(userId, paymentId, paymentStatus);
 
         if(updatedPayment == null){

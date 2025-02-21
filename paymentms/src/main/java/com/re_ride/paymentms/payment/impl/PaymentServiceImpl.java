@@ -5,6 +5,7 @@ import com.re_ride.paymentms.payment.PaymentRepository;
 import com.re_ride.paymentms.payment.PaymentService;
 import com.re_ride.paymentms.payment.client.UserClient;
 import com.re_ride.paymentms.payment.dto.UserDTO;
+import com.re_ride.paymentms.payment.response.UserResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +22,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     public UserDTO getUser(Long userId){
-        UserDTO user = userClient.getUserById(userId);
+        UserResponse response = userClient.getUserById(userId);
 
-        if(user == null || user.getUserType() != "RIDER"){
+        if(response == null || response.getUserDTO() == null || response.getUserDTO().getUserType().equals("DRIVER")) {
             return null;
         }
 
-        return user;
+        System.out.println(response.getUserDTO().getUserType());
+
+        return response.getUserDTO();
     }
 
     @Override
