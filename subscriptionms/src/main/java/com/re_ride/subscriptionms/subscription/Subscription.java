@@ -83,6 +83,10 @@ public class Subscription {
         }
     }
 
+    public void removeRoute() {
+        this.route = null;
+    }
+
     public Long getSubscriptionId() {
         return subscriptionId;
     }
