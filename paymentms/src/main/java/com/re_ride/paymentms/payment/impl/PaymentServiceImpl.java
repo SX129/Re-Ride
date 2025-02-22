@@ -28,8 +28,6 @@ public class PaymentServiceImpl implements PaymentService {
             return null;
         }
 
-        System.out.println(response.getUserDTO().getUserType());
-
         return response.getUserDTO();
     }
 
