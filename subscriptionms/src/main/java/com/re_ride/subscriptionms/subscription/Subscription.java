@@ -1,6 +1,8 @@
 package com.re_ride.subscriptionms.subscription;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.re_ride.subscriptionms.route.Route;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -35,7 +37,10 @@ public class Subscription {
 
     private Long paymentId;
 
-    private Long routeId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "route_id")
+    @JsonBackReference
+    private Route route;
 
     private BigDecimal subscriptionAmount;
 
@@ -56,9 +61,9 @@ public class Subscription {
 
     public Subscription(){}
 
-    public Subscription(Long subscriptionId, Long routeId, BigDecimal subscriptionAmount, PickUpDate pickUpDate, LocalTime pickUpTime, SubscriptionStatus subscriptionStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Subscription(Long subscriptionId, Route route, BigDecimal subscriptionAmount, PickUpDate pickUpDate, LocalTime pickUpTime, SubscriptionStatus subscriptionStatus, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.subscriptionId = subscriptionId;
-        this.routeId = routeId;
+        this.route = route;
         this.subscriptionAmount = subscriptionAmount;
         this.pickUpDate = pickUpDate;
         this.pickUpTime = pickUpTime;
@@ -102,12 +107,12 @@ public class Subscription {
         this.paymentId = paymentId;
     }
 
-    public Long getRouteId() {
-        return routeId;
+    public Route getRoute() {
+        return route;
     }
 
-    public void setRouteId(Long routeId) {
-        this.routeId = routeId;
+    public void setRoute(Route route) {
+        this.route = route;
     }
 
     public BigDecimal getSubscriptionAmount() {

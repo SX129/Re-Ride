@@ -91,10 +91,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 updatedSubscription.setPaymentId(subscription.getPaymentId());
             }
 
-            if(subscription.getRouteId() != null){
-                updatedSubscription.setRouteId(subscription.getRouteId());
-            }
-
             if(subscription.getSubscriptionAmount() != null){
                 updatedSubscription.setSubscriptionAmount(subscription.getSubscriptionAmount());
             }
