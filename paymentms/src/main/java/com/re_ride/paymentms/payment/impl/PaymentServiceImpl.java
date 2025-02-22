@@ -32,6 +32,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    public Payment getMostRecentPayment(Long userId) {
+        if(getUser(userId) == null){
+            return null;
+        }
+
+        return paymentRepository.findTopByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    @Override
     public List<Payment> getAllPaymentsByUserId(Long userId) {
         if(getUser(userId) == null){
             return null;

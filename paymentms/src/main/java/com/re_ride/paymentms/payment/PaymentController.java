@@ -16,6 +16,18 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    //get most recent payment of user
+    @GetMapping("/recent")
+    public ResponseEntity<PaymentResponse> getMostRecentPayment(@PathVariable Long userId){
+        Payment payment = paymentService.getMostRecentPayment(userId);
+
+        if(payment == null){
+            return new ResponseEntity<>(new PaymentResponse(null, "User or payment not found."), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new PaymentResponse(payment, "Payment found."), HttpStatus.OK);
+    }
+
     //get all payments of user
     @GetMapping()
     public ResponseEntity<List<Payment>> getAllPaymentsByUserId(@PathVariable Long userId, @RequestParam(required = false) String paymentStatus){

@@ -3,6 +3,8 @@ package com.re_ride.paymentms.payment;
 import java.util.List;
 
 public interface PaymentService {
+
+    Payment getMostRecentPayment(Long userId);
     List<Payment> getAllPaymentsByUserId(Long userId);
 
     List<Payment> getAllPaymentStatusByUserId(Long userId, String paymentStatus);

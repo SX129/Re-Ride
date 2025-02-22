@@ -20,7 +20,7 @@ public class SubscriptionController {
         Subscription subscription = subscriptionService.getSubscriptionByUserId(userId);
 
         if(subscription == null){
-            return new ResponseEntity<>(new SubscriptionResponse(null, "User not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new SubscriptionResponse(null, "Subscription not found."), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(new SubscriptionResponse(subscription, "Subscription found successfully."), HttpStatus.OK);
@@ -32,7 +32,7 @@ public class SubscriptionController {
         Subscription savedSubscription = subscriptionService.createSubscription(userId, subscription);
 
         if(savedSubscription == null){
-            return new ResponseEntity<>(new SubscriptionResponse(null, "User not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new SubscriptionResponse(null, "Unable to create subscription."), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(new SubscriptionResponse(savedSubscription, "Subscription created successfully."), HttpStatus.CREATED);
@@ -44,7 +44,7 @@ public class SubscriptionController {
         Subscription updatedSubscription = subscriptionService.updateSubscription(userId, subscription);
 
         if(updatedSubscription == null){
-            return new ResponseEntity<>(new SubscriptionResponse(null, "User or subscription not found."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new SubscriptionResponse(null, "Subscription not found."), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(new SubscriptionResponse(updatedSubscription, "Subscription updated successfully."), HttpStatus.OK);
@@ -54,7 +54,7 @@ public class SubscriptionController {
     @DeleteMapping
     public ResponseEntity<String> deleteSubscription(@PathVariable Long userId){
         if(subscriptionService.deleteSubscription(userId) == false){
-            return new ResponseEntity<>("User or subscription not found.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Subscription not found.", HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>("Subscription deleted successfully.", HttpStatus.OK);
