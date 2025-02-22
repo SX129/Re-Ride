@@ -1,22 +1,23 @@
 package com.re_ride.subscriptionms.subscription.response;
 
 import com.re_ride.subscriptionms.subscription.Subscription;
+import com.re_ride.subscriptionms.subscription.dto.SubscriptionDTO;
 
 public class SubscriptionResponse {
-    private Subscription subscription;
+    private SubscriptionDTO subscriptionDTO;
     private String message;
 
-    public SubscriptionResponse(Subscription subscription, String message) {
-        this.subscription = subscription;
+    public SubscriptionResponse(SubscriptionDTO subscriptionDTO, String message) {
+        this.subscriptionDTO = subscriptionDTO;
         this.message = message;
     }
 
-    public Subscription getSubscription() {
-        return subscription;
+    public SubscriptionDTO getSubscriptionDTO() {
+        return subscriptionDTO;
     }
 
-    public void setSubscription(Subscription subscription) {
-        this.subscription = subscription;
+    public void setSubscriptionDTO(SubscriptionDTO subscriptionDTO) {
+        this.subscriptionDTO = subscriptionDTO;
     }
 
     public String getMessage() {

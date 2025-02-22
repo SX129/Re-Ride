@@ -1,5 +1,7 @@
 package com.re_ride.subscriptionms.route;
 
+import com.re_ride.subscriptionms.route.dto.RouteDTO;
+import com.re_ride.subscriptionms.route.mapper.RouteMapper;
 import com.re_ride.subscriptionms.route.response.RouteResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,9 @@ public class RouteController {
             return new ResponseEntity<>(new RouteResponse(null, "Route not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new RouteResponse(route, "Route found successfully."), HttpStatus.OK);
+        RouteDTO routeDTO = RouteMapper.mapRouteDto(route);
+
+        return new ResponseEntity<>(new RouteResponse(routeDTO, "Route found successfully."), HttpStatus.OK);
     }
 
     //create route
@@ -35,7 +39,9 @@ public class RouteController {
             return new ResponseEntity<>(new RouteResponse(null, "Subscription not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new RouteResponse(savedRoute, "Route created successfully."), HttpStatus.CREATED);
+        RouteDTO routeDTO = RouteMapper.mapRouteDto(savedRoute);
+
+        return new ResponseEntity<>(new RouteResponse(routeDTO, "Route created successfully."), HttpStatus.CREATED);
     }
 
     //update route
@@ -47,7 +53,9 @@ public class RouteController {
             return new ResponseEntity<>(new RouteResponse(null, "Route not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new RouteResponse(updatedRoute, "Route updated successfully."), HttpStatus.OK);
+        RouteDTO routeDTO = RouteMapper.mapRouteDto(updatedRoute);
+
+        return new ResponseEntity<>(new RouteResponse(routeDTO, "Route updated successfully."), HttpStatus.OK);
     }
 
     //delete route

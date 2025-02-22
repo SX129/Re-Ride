@@ -19,11 +19,16 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public Route getRouteBySubscriptionId(Long subscriptionId) {
-        return routeRepository.findBySubscriptionId(subscriptionId);
+        return routeRepository.findBySubscription_SubscriptionId(subscriptionId);
     }
 
     @Override
     public Route createRoute(Long subscriptionId, Route route) {
+        if (routeRepository.existsBySubscription_SubscriptionId(subscriptionId)) {
+            System.out.println("Route already exists for this subscription id.");
+            return null;
+        }
+
         Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
 
         if(subscription == null){

@@ -1,22 +1,23 @@
 package com.re_ride.subscriptionms.route.response;
 
 import com.re_ride.subscriptionms.route.Route;
+import com.re_ride.subscriptionms.route.dto.RouteDTO;
 
 public class RouteResponse {
-    private Route route;
+    private RouteDTO routeDto;
     private String message;
 
-    public RouteResponse(Route route, String message) {
-        this.route = route;
+    public RouteResponse(RouteDTO routeDto, String message) {
+        this.routeDto = routeDto;
         this.message = message;
     }
 
-    public Route getRoute() {
-        return route;
+    public RouteDTO getRouteDto() {
+        return routeDto;
     }
 
-    public void setRoute(Route route) {
-        this.route = route;
+    public void setRouteDto(RouteDTO routeDto) {
+        this.routeDto = routeDto;
     }
 
     public String getMessage() {

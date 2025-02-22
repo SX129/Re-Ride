@@ -1,5 +1,7 @@
 package com.re_ride.subscriptionms.subscription;
 
+import com.re_ride.subscriptionms.subscription.dto.SubscriptionDTO;
+import com.re_ride.subscriptionms.subscription.mapper.SubscriptionMapper;
 import com.re_ride.subscriptionms.subscription.response.SubscriptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,9 @@ public class SubscriptionController {
             return new ResponseEntity<>(new SubscriptionResponse(null, "Subscription not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new SubscriptionResponse(subscription, "Subscription found successfully."), HttpStatus.OK);
+        SubscriptionDTO subscriptionDTO = SubscriptionMapper.mapSubscriptionDto(subscription);
+
+        return new ResponseEntity<>(new SubscriptionResponse(subscriptionDTO, "Subscription found successfully."), HttpStatus.OK);
     }
 
     //create subscription
@@ -35,7 +39,9 @@ public class SubscriptionController {
             return new ResponseEntity<>(new SubscriptionResponse(null, "Unable to create subscription."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new SubscriptionResponse(savedSubscription, "Subscription created successfully."), HttpStatus.CREATED);
+        SubscriptionDTO subscriptionDTO = SubscriptionMapper.mapSubscriptionDto(savedSubscription);
+
+        return new ResponseEntity<>(new SubscriptionResponse(subscriptionDTO, "Subscription created successfully."), HttpStatus.CREATED);
     }
 
     //update subscription
@@ -47,7 +53,9 @@ public class SubscriptionController {
             return new ResponseEntity<>(new SubscriptionResponse(null, "Subscription not found."), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(new SubscriptionResponse(updatedSubscription, "Subscription updated successfully."), HttpStatus.OK);
+        SubscriptionDTO subscriptionDTO = SubscriptionMapper.mapSubscriptionDto(updatedSubscription);
+
+        return new ResponseEntity<>(new SubscriptionResponse(subscriptionDTO, "Subscription updated successfully."), HttpStatus.OK);
     }
 
     //delete subscription
