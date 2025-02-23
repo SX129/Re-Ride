@@ -6,9 +6,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "subscriptionms", url = "http://localhost:8084/users")
+@FeignClient(name = "subscriptionms")
 public interface SubscriptionClient {
 
-    @GetMapping("/{userId}/subscription")
+    @GetMapping("/users/{userId}/subscription")
     SubscriptionResponse getSubscriptionByUserId(@PathVariable Long userId);
 }

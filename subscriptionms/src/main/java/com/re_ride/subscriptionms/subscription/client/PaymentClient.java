@@ -5,9 +5,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "paymentms", url = "http://localhost:8083/users")
+@FeignClient(name = "paymentms")
 public interface PaymentClient {
 
-    @GetMapping("/{userId}/payments/recent")
+    @GetMapping("/users/{userId}/payments/recent")
     PaymentResponse getMostRecentPayment(@PathVariable Long userId);
 }
