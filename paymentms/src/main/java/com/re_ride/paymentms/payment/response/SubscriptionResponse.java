@@ -1,6 +1,7 @@
-package com.re_ride.subscriptionms.subscription.response;
+package com.re_ride.paymentms.payment.response;
 
-import com.re_ride.subscriptionms.subscription.dto.SubscriptionDTO;
+import com.re_ride.paymentms.payment.dto.SubscriptionDTO;
+import com.re_ride.paymentms.payment.dto.UserDTO;
 
 public class SubscriptionResponse {
     private SubscriptionDTO subscriptionDTO;

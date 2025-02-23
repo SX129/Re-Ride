@@ -3,8 +3,11 @@ package com.re_ride.paymentms.payment.impl;
 import com.re_ride.paymentms.payment.Payment;
 import com.re_ride.paymentms.payment.PaymentRepository;
 import com.re_ride.paymentms.payment.PaymentService;
+import com.re_ride.paymentms.payment.client.SubscriptionClient;
 import com.re_ride.paymentms.payment.client.UserClient;
+import com.re_ride.paymentms.payment.dto.SubscriptionDTO;
 import com.re_ride.paymentms.payment.dto.UserDTO;
+import com.re_ride.paymentms.payment.response.SubscriptionResponse;
 import com.re_ride.paymentms.payment.response.UserResponse;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
     private UserClient userClient;
+    private SubscriptionClient subscriptionClient;
 
     public PaymentServiceImpl(PaymentRepository paymentRepository, UserClient userClient) {
         this.paymentRepository = paymentRepository;
@@ -29,6 +33,16 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         return response.getUserDTO();
+    }
+
+    public SubscriptionDTO getSubscription(Long userId){
+        SubscriptionResponse response = subscriptionClient.getSubscriptionByUserId(userId);
+
+        if(response == null || response.getSubscriptionDTO() == null) {
+            return null;
+        }
+
+        return response.getSubscriptionDTO();
     }
 
     @Override
@@ -84,6 +98,14 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         payment.setUserId(userId);
+
+        SubscriptionDTO subscriptionDTO = getSubscription(userId);
+
+        if(subscriptionDTO != null){
+            payment.setTotalAmount(subscriptionDTO.getSubscriptionAmount());
+            payment.setSubscriptionId(subscriptionDTO.getSubscriptionId());
+        }
+
         paymentRepository.save(payment);
 
         return payment;
