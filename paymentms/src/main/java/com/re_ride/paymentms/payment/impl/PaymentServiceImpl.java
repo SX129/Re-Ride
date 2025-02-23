@@ -20,9 +20,10 @@ public class PaymentServiceImpl implements PaymentService {
     private UserClient userClient;
     private SubscriptionClient subscriptionClient;
 
-    public PaymentServiceImpl(PaymentRepository paymentRepository, UserClient userClient) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, UserClient userClient, SubscriptionClient subscriptionClient) {
         this.paymentRepository = paymentRepository;
         this.userClient = userClient;
+        this.subscriptionClient = subscriptionClient;
     }
 
     public UserDTO getUser(Long userId){
