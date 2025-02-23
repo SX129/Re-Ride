@@ -36,14 +36,18 @@ public class PaymentServiceImpl implements PaymentService {
         return response.getUserDTO();
     }
 
-    public SubscriptionDTO getSubscription(Long userId){
-        SubscriptionResponse response = subscriptionClient.getSubscriptionByUserId(userId);
+    public SubscriptionDTO getSubscription(Long userId) {
+        try {
+            SubscriptionResponse response = subscriptionClient.getSubscriptionByUserId(userId);
 
-        if(response == null || response.getSubscriptionDTO() == null) {
+            if (response == null || response.getSubscriptionDTO() == null) {
+                return null;
+            }
+
+            return response.getSubscriptionDTO();
+        } catch (Exception e) {
             return null;
         }
-
-        return response.getSubscriptionDTO();
     }
 
     @Override
