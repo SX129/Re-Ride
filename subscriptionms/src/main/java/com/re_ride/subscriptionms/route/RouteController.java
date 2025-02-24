@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/subscriptions/{subscriptionId}/route")
+@RequestMapping("/api/subscriptions/{subscriptionId}/route")
 public class RouteController {
     private RouteService routeService;
 

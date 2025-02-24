@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "subscriptionms")
 public interface SubscriptionClient {
 
-    @GetMapping("/users/{userId}/subscription")
+    @GetMapping("/api/users/{userId}/subscription")
     SubscriptionResponse getSubscriptionByUserId(@PathVariable Long userId);
 }
