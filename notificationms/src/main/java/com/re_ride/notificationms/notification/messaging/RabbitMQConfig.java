@@ -25,6 +25,16 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue subscriptionQueue(){
+        return QueueBuilder.durable(SUBSCRIPTION_QUEUE).build();
+    }
+
+    @Bean
+    public Queue rideQueue(){
+        return QueueBuilder.durable(RIDE_QUEUE).build();
+    }
+
+    @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
