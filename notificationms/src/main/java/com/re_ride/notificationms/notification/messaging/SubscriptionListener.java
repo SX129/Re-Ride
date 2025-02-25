@@ -8,31 +8,22 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class UserListener {
+public class SubscriptionListener {
     private NotificationService notificationService;
 
-    public UserListener(NotificationService notificationService) {
+    public SubscriptionListener(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
-    @RabbitListener(queues = RabbitMQConfig.USER_QUEUE)
-    public void handleUserRequests(UserEvent event){
+    @RabbitListener(queues = RabbitMQConfig.SUBSCRIPTION_QUEUE)
+    public void handleSubscriptionRequests(SubscriptionEvent event){
         System.out.println("Received event: " + event);
 
         Notification notification = new Notification();
+
+        notification.setMessage("Your subscription is now active. Enjoy our services!");
         notification.setCreatedAt(LocalDateTime.now());
         notification.setNotificationType(Notification.NotificationType.WELCOME);
-
-        switch (event.getUserType()){
-            case RIDER:
-                notification.setMessage("Welcome to Re-Ride! Thanks for riding with us.");
-                break;
-            case DRIVER:
-                notification.setMessage("Welcome to Re-Ride! Thanks for driving with us.");
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown user type: " + event.getUserType());
-        }
 
         notificationService.createNotification(event.getUserId(), notification);
     }

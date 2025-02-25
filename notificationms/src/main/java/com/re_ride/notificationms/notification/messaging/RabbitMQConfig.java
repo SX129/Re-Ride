@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     public static final String USER_QUEUE = "userQueue";
     public static final String PAYMENT_QUEUE = "paymentQueue";
+    public static final String SUBSCRIPTION_QUEUE = "subscriptionQueue";
+    public static final String RIDE_QUEUE = "rideQueue";
 
     @Bean
     public Queue userQueue(){

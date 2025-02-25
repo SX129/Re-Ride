@@ -3,8 +3,11 @@ package com.re_ride.subscriptionms.ride.impl;
 import com.re_ride.subscriptionms.ride.Ride;
 import com.re_ride.subscriptionms.ride.RideRepository;
 import com.re_ride.subscriptionms.ride.RideService;
+import com.re_ride.subscriptionms.ride.messaging.RabbitMQConfig;
+import com.re_ride.subscriptionms.ride.messaging.RideEvent;
 import com.re_ride.subscriptionms.subscription.Subscription;
 import com.re_ride.subscriptionms.subscription.SubscriptionRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +16,12 @@ import java.util.List;
 public class RideServiceImpl implements RideService {
     private RideRepository rideRepository;
     private SubscriptionRepository subscriptionRepository;
+    private RabbitTemplate rabbitTemplate;
 
-    public RideServiceImpl(RideRepository rideRepository, SubscriptionRepository subscriptionRepository) {
+    public RideServiceImpl(RideRepository rideRepository, SubscriptionRepository subscriptionRepository, RabbitTemplate rabbitTemplate) {
         this.rideRepository = rideRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     private Subscription getValidSubscription(Long userId){
@@ -58,14 +63,20 @@ public class RideServiceImpl implements RideService {
         if(subscription == null){
             return null;
         }
-        System.out.println("TEST");
-        System.out.println(subscription.getSubscriptionId());
 
         ride.setUserId(userId);
         ride.setSubscriptionId(subscription.getSubscriptionId());
         ride.setRouteId(subscription.getRoute().getRouteId());
 
         rideRepository.save(ride);
+
+        RideEvent.RideStatus rideStatus = RideEvent.RideStatus.valueOf(ride.getRideStatus().name());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY,
+                new RideEvent(ride.getRideId(), userId, rideStatus)
+        );
 
         return ride;
     }
@@ -99,6 +110,14 @@ public class RideServiceImpl implements RideService {
             }
 
             rideRepository.save(updatedRide);
+
+            RideEvent.RideStatus rideStatus = RideEvent.RideStatus.valueOf(ride.getRideStatus().name());
+
+            rabbitTemplate.convertAndSend(
+                    RabbitMQConfig.EXCHANGE,
+                    RabbitMQConfig.ROUTING_KEY,
+                    new RideEvent(ride.getRideId(), userId, rideStatus)
+            );
 
             return updatedRide;
         }

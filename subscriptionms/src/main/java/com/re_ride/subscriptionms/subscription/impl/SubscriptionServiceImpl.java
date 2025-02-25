@@ -7,8 +7,11 @@ import com.re_ride.subscriptionms.subscription.client.PaymentClient;
 import com.re_ride.subscriptionms.subscription.client.UserClient;
 import com.re_ride.subscriptionms.subscription.dto.Payment;
 import com.re_ride.subscriptionms.subscription.dto.UserDTO;
+import com.re_ride.subscriptionms.subscription.messaging.RabbitMQConfig;
+import com.re_ride.subscriptionms.subscription.messaging.SubscriptionEvent;
 import com.re_ride.subscriptionms.subscription.response.PaymentResponse;
 import com.re_ride.subscriptionms.subscription.response.UserResponse;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,11 +21,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private SubscriptionRepository subscriptionRepository;
     private UserClient userClient;
     private PaymentClient paymentClient;
+    private RabbitTemplate rabbitTemplate;
 
-    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, UserClient userClient, PaymentClient paymentClient) {
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, UserClient userClient, PaymentClient paymentClient, RabbitTemplate rabbitTemplate) {
         this.subscriptionRepository = subscriptionRepository;
         this.userClient = userClient;
         this.paymentClient = paymentClient;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public UserDTO getUser(Long userId){
@@ -73,6 +78,14 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         subscription.setPaymentId(payment.getPaymentId());
         subscription.setSubscriptionStatus(Subscription.SubscriptionStatus.valueOf("ACTIVE"));
         subscriptionRepository.save(subscription);
+
+        SubscriptionEvent.SubscriptionStatus subscriptionStatus = SubscriptionEvent.SubscriptionStatus.valueOf(subscription.getSubscriptionStatus().name());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY,
+                new SubscriptionEvent(subscription.getSubscriptionId(), userId, subscriptionStatus)
+        );
 
         return subscription;
     }

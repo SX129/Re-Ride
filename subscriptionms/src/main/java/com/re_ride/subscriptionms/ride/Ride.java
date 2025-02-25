@@ -40,6 +40,7 @@ public class Ride {
 
     private Integer estimatedDuration;
 
+    @Enumerated(EnumType.STRING)
     private RideStatus rideStatus;
 
     public Ride(){

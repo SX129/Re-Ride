@@ -8,32 +8,36 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class PaymentListener {
+public class RideListener {
     private NotificationService notificationService;
 
-    public PaymentListener(NotificationService notificationService) {
+    public RideListener(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
-    @RabbitListener(queues = RabbitMQConfig.PAYMENT_QUEUE)
-    public void handlePaymentRequests(PaymentEvent event){
+    @RabbitListener(queues = RabbitMQConfig.RIDE_QUEUE)
+    public void handleRideRequests(RideEvent event){
         System.out.println("Received event: " + event);
 
         Notification notification = new Notification();
         notification.setCreatedAt(LocalDateTime.now());
-        notification.setNotificationType(Notification.NotificationType.PAYMENT_RECEIPT);
+        notification.setNotificationType(Notification.NotificationType.RIDE_UPDATE);
 
-        switch (event.getPaymentStatus()){
-            case COMPLETED:
-                notification.setMessage("Your payment was successful. Thank you for subscribing!");
-                break;
-            case FAILED:
-                notification.setMessage("Your payment could not be processed. Please try again or contact support.");
-                break;
+        switch (event.getRideStatus()) {
             case PENDING:
+                notification.setMessage("Your ride is in progress.");
+                break;
+            case COMPLETED:
+                notification.setMessage("Your ride has been completed. Thanks for riding!");
+                break;
+            case CANCELLED:
+                notification.setMessage("Your ride has been cancelled.");
+                break;
+            case MISSED:
+                notification.setMessage("You missed your ride.");
                 break;
             default:
-                throw new IllegalArgumentException("Unknown payment status: " + event.getPaymentStatus());
+                throw new IllegalArgumentException("Unknown ride status: " + event.getRideStatus());
         }
 
         notificationService.createNotification(event.getUserId(), notification);
