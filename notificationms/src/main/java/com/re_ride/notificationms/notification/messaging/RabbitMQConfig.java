@@ -9,11 +9,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    public static final String QUEUE = "userQueue";
+    public static final String USER_QUEUE = "userQueue";
+    public static final String PAYMENT_QUEUE = "paymentQueue";
 
     @Bean
-    public Queue queue(){
-        return QueueBuilder.durable(QUEUE).build();
+    public Queue userQueue(){
+        return QueueBuilder.durable(USER_QUEUE).build();
+    }
+
+    @Bean
+    public Queue paymentQueue(){
+        return QueueBuilder.durable(PAYMENT_QUEUE).build();
     }
 
     @Bean

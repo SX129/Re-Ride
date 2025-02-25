@@ -7,8 +7,11 @@ import com.re_ride.paymentms.payment.client.SubscriptionClient;
 import com.re_ride.paymentms.payment.client.UserClient;
 import com.re_ride.paymentms.payment.dto.SubscriptionDTO;
 import com.re_ride.paymentms.payment.dto.UserDTO;
+import com.re_ride.paymentms.payment.messaging.PaymentEvent;
+import com.re_ride.paymentms.payment.messaging.RabbitMQConfig;
 import com.re_ride.paymentms.payment.response.SubscriptionResponse;
 import com.re_ride.paymentms.payment.response.UserResponse;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +22,13 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentRepository paymentRepository;
     private UserClient userClient;
     private SubscriptionClient subscriptionClient;
+    private RabbitTemplate rabbitTemplate;
 
-    public PaymentServiceImpl(PaymentRepository paymentRepository, UserClient userClient, SubscriptionClient subscriptionClient) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, UserClient userClient, SubscriptionClient subscriptionClient, RabbitTemplate rabbitTemplate) {
         this.paymentRepository = paymentRepository;
         this.userClient = userClient;
         this.subscriptionClient = subscriptionClient;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     public UserDTO getUser(Long userId){
@@ -103,12 +108,25 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         payment.setUserId(userId);
+        PaymentEvent.PaymentStatus paymentType = PaymentEvent.PaymentStatus.valueOf(payment.getPaymentType().name());
 
         SubscriptionDTO subscriptionDTO = getSubscription(userId);
 
         if(subscriptionDTO != null){
             payment.setTotalAmount(subscriptionDTO.getSubscriptionAmount());
             payment.setSubscriptionId(subscriptionDTO.getSubscriptionId());
+
+            rabbitTemplate.convertAndSend(
+                    RabbitMQConfig.EXCHANGE,
+                    RabbitMQConfig.ROUTING_KEY,
+                    new PaymentEvent(payment.getPaymentId(), userId, subscriptionDTO.getSubscriptionId(), subscriptionDTO.getSubscriptionAmount(), paymentType)
+            );
+        }else{
+            rabbitTemplate.convertAndSend(
+                    RabbitMQConfig.EXCHANGE,
+                    RabbitMQConfig.ROUTING_KEY,
+                    new PaymentEvent(payment.getPaymentId(), userId, null, payment.getTotalAmount(), paymentType)
+            );
         }
 
         paymentRepository.save(payment);

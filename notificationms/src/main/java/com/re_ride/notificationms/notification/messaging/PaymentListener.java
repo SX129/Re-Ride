@@ -8,27 +8,27 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class UserListener {
+public class PaymentListener {
     private NotificationService notificationService;
 
-    public UserListener(NotificationService notificationService) {
+    public PaymentListener(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
-    @RabbitListener(queues = RabbitMQConfig.USER_QUEUE)
-    public void handleUserCreated(UserEvent event){
+    @RabbitListener(queues = RabbitMQConfig.PAYMENT_QUEUE)
+    public void handlePaymentCreated(PaymentEvent event){
         System.out.println("Received event: " + event);
 
         Notification notification = new Notification();
 
-        if(event.getUserType() == UserEvent.UserType.RIDER){
-            notification.setMessage("Welcome to Re-Ride! Thanks for riding with us.");
+        if(event.getPaymentStatus() == PaymentEvent.PaymentStatus.FAILED){
+            notification.setMessage("Your payment could not be processed. Please try again or contact support.");
         }else{
-            notification.setMessage("Welcome to Re-Ride! Thanks for driving with us.");
+            notification.setMessage("Your payment was successful. Thank you for subscribing!");
         }
 
         notification.setCreatedAt(LocalDateTime.now());
-        notification.setNotificationType(Notification.NotificationType.WELCOME);
+        notification.setNotificationType(Notification.NotificationType.PAYMENT_RECEIPT);
 
         notificationService.createNotification(event.getUserId(), notification);
     }
