@@ -3,6 +3,9 @@ package com.re_ride.userms.user.impl;
 import com.re_ride.userms.user.User;
 import com.re_ride.userms.user.UserRepository;
 import com.re_ride.userms.user.UserService;
+import com.re_ride.userms.user.messaging.RabbitMQConfig;
+import com.re_ride.userms.user.messaging.UserEvent;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private RabbitTemplate rabbitTemplate;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository, RabbitTemplate rabbitTemplate){
         this.userRepository = userRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
     @Override
     public List<User> getAllUsers() {
@@ -36,6 +41,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         userRepository.save(user);
+
+        UserEvent.UserType userType = UserEvent.UserType.valueOf(user.getUserType().name());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY,
+                new UserEvent(user.getUserId(), userType, user.getFirstName(), user.getEmail())
+        );
+
         return user;
     }
 

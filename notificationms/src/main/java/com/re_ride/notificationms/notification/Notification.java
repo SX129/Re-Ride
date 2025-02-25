@@ -13,7 +13,8 @@ public class Notification {
     public enum NotificationType {
         RIDE_UPDATE,
         PAYMENT_RECEIPT,
-        PROMOTION
+        PROMOTION,
+        WELCOME
     }
 
     @Id

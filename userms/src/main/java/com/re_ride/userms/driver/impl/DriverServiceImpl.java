@@ -4,6 +4,9 @@ import com.re_ride.userms.driver.Driver;
 import com.re_ride.userms.driver.DriverRepository;
 import com.re_ride.userms.driver.DriverService;
 import com.re_ride.userms.user.UserRepository;
+import com.re_ride.userms.user.messaging.RabbitMQConfig;
+import com.re_ride.userms.user.messaging.UserEvent;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +16,12 @@ import java.util.stream.Collectors;
 public class DriverServiceImpl implements DriverService {
     private DriverRepository driverRepository;
     private UserRepository userRepository;
+    private RabbitTemplate rabbitTemplate;
 
-    public DriverServiceImpl(DriverRepository driverRepository, UserRepository userRepository){
+    public DriverServiceImpl(DriverRepository driverRepository, UserRepository userRepository, RabbitTemplate rabbitTemplate){
         this.driverRepository = driverRepository;
         this.userRepository = userRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
 
@@ -41,6 +46,15 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public Driver createDriver(Driver driver) {
         driverRepository.save(driver);
+
+        UserEvent.UserType userType = UserEvent.UserType.valueOf(driver.getUserType().name());
+
+        rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE,
+                RabbitMQConfig.ROUTING_KEY,
+                new UserEvent(driver.getUserId(), userType, driver.getFirstName(), driver.getEmail())
+        );
+
         return driver;
     }
 
