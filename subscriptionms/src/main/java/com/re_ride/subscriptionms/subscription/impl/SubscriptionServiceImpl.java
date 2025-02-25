@@ -82,8 +82,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         SubscriptionEvent.SubscriptionStatus subscriptionStatus = SubscriptionEvent.SubscriptionStatus.valueOf(subscription.getSubscriptionStatus().name());
 
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.EXCHANGE,
-                RabbitMQConfig.ROUTING_KEY,
+                RabbitMQConfig.SUBSCRIPTION_EXCHANGE,
+                RabbitMQConfig.SUBSCRIPTION_ROUTING_KEY,
                 new SubscriptionEvent(subscription.getSubscriptionId(), userId, subscriptionStatus)
         );
 

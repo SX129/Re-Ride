@@ -3,11 +3,11 @@ package com.re_ride.subscriptionms.ride.impl;
 import com.re_ride.subscriptionms.ride.Ride;
 import com.re_ride.subscriptionms.ride.RideRepository;
 import com.re_ride.subscriptionms.ride.RideService;
-import com.re_ride.subscriptionms.ride.messaging.RabbitMQConfig;
 import com.re_ride.subscriptionms.ride.messaging.RideEvent;
 import com.re_ride.subscriptionms.subscription.Subscription;
 import com.re_ride.subscriptionms.subscription.SubscriptionRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.re_ride.subscriptionms.subscription.messaging.RabbitMQConfig;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,8 +73,8 @@ public class RideServiceImpl implements RideService {
         RideEvent.RideStatus rideStatus = RideEvent.RideStatus.valueOf(ride.getRideStatus().name());
 
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.EXCHANGE,
-                RabbitMQConfig.ROUTING_KEY,
+                RabbitMQConfig.RIDE_EXCHANGE,
+                RabbitMQConfig.RIDE_ROUTING_KEY,
                 new RideEvent(ride.getRideId(), userId, rideStatus)
         );
 
@@ -114,8 +114,8 @@ public class RideServiceImpl implements RideService {
             RideEvent.RideStatus rideStatus = RideEvent.RideStatus.valueOf(ride.getRideStatus().name());
 
             rabbitTemplate.convertAndSend(
-                    RabbitMQConfig.EXCHANGE,
-                    RabbitMQConfig.ROUTING_KEY,
+                    RabbitMQConfig.RIDE_EXCHANGE,
+                    RabbitMQConfig.RIDE_ROUTING_KEY,
                     new RideEvent(ride.getRideId(), userId, rideStatus)
             );
 

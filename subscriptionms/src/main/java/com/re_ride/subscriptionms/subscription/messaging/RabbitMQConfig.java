@@ -12,23 +12,42 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    public static final String EXCHANGE = "subscription";
-    public static final String ROUTING_KEY = "subscription";
-    public static final String QUEUE = "subscriptionQueue";
+    public static final String SUBSCRIPTION_EXCHANGE = "subscription";
+    public static final String SUBSCRIPTION_ROUTING_KEY = "subscription";
+    public static final String SUBSCRIPTION_QUEUE = "subscriptionQueue";
+
+    public static final String RIDE_EXCHANGE = "ride";
+    public static final String RIDE_ROUTING_KEY = "ride";
+    public static final String RIDE_QUEUE = "rideQueue";
 
     @Bean
-    public Queue queue(){
-        return QueueBuilder.durable(QUEUE).build();
+    public Queue subscriptionQueue(){
+        return QueueBuilder.durable(SUBSCRIPTION_QUEUE).build();
     }
 
     @Bean
-    public DirectExchange exchange(){
-        return new DirectExchange(EXCHANGE);
+    public DirectExchange subscriptionExchange(){
+        return new DirectExchange(SUBSCRIPTION_EXCHANGE);
     }
 
     @Bean
-    public Binding binding(Queue queue, DirectExchange exchange){
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    public Binding subscriptionBinding(Queue queue, DirectExchange exchange){
+        return BindingBuilder.bind(queue).to(exchange).with(SUBSCRIPTION_ROUTING_KEY);
+    }
+
+    @Bean
+    public Queue rideQueue(){
+        return QueueBuilder.durable(RIDE_QUEUE).build();
+    }
+
+    @Bean
+    public DirectExchange rideExchange(){
+        return new DirectExchange(RIDE_EXCHANGE);
+    }
+
+    @Bean
+    public Binding rideBinding(Queue queue, DirectExchange exchange){
+        return BindingBuilder.bind(queue).to(exchange).with(RIDE_ROUTING_KEY);
     }
 
     @Bean
