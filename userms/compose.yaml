@@ -28,12 +28,21 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - postgres
   servicereg:
     image: syph3/servicereg:latest
     container_name: servicereg
     ports:
       - "8761:8761"
     depends_on:
+      - rabbitmq
       - postgres
       - pgadmin
     networks:
