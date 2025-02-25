@@ -108,7 +108,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         payment.setUserId(userId);
-        PaymentEvent.PaymentStatus paymentType = PaymentEvent.PaymentStatus.valueOf(payment.getPaymentType().name());
+        PaymentEvent.PaymentStatus paymentStatus = PaymentEvent.PaymentStatus.valueOf(payment.getPaymentStatus().name());
 
         SubscriptionDTO subscriptionDTO = getSubscription(userId);
 
@@ -119,13 +119,13 @@ public class PaymentServiceImpl implements PaymentService {
             rabbitTemplate.convertAndSend(
                     RabbitMQConfig.EXCHANGE,
                     RabbitMQConfig.ROUTING_KEY,
-                    new PaymentEvent(payment.getPaymentId(), userId, subscriptionDTO.getSubscriptionId(), subscriptionDTO.getSubscriptionAmount(), paymentType)
+                    new PaymentEvent(payment.getPaymentId(), userId, subscriptionDTO.getSubscriptionId(), subscriptionDTO.getSubscriptionAmount(), paymentStatus)
             );
         }else{
             rabbitTemplate.convertAndSend(
                     RabbitMQConfig.EXCHANGE,
                     RabbitMQConfig.ROUTING_KEY,
-                    new PaymentEvent(payment.getPaymentId(), userId, null, payment.getTotalAmount(), paymentType)
+                    new PaymentEvent(payment.getPaymentId(), userId, null, payment.getTotalAmount(), paymentStatus)
             );
         }
 
